@@ -8,6 +8,7 @@ import {useState} from "react";
 const Home: NextPage = () => {
     const {address} = useAccount()
     const [nonce, setNonce] = useState(0)
+    const [price, setPrice] = useState(BigInt(0))
     const {sendTransactionAsync} = useSendTransaction()
     console.log('nonce', nonce)
     const send = async () => {
@@ -17,10 +18,11 @@ const Home: NextPage = () => {
                 to: address,
                 value: BigInt(0),
                 nonce: +nonce,
-                type: "eip1559"
+                type: "eip1559",
+                gasPrice: price
             })
             console.log(tx)
-        } catch (e:any) {
+        } catch (e: any) {
             alert(e.message)
         }
     }
@@ -39,7 +41,9 @@ const Home: NextPage = () => {
                 <ConnectButton/>
                 <input type="number" placeholder="nonce" className="mt-4"
                        onChange={(e: any) => setNonce(e.target.value)}/>
-                <input type="text" placeholder="gasPrice" className="mt-2"/>
+
+                <input type="text" placeholder="gasPrice" className="mt-2"
+                       onChange={(e) => setPrice(BigInt(+e.target.value))}/>
                 <button onClick={send}>confirm</button>
             </main>
         </div>
